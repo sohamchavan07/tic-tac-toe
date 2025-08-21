@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Soham - Portfolio</title>
-  <!-- Inline CSS for demonstration; move to a separate file for production -->
+  <title>Tic Tac Toe</title>
   <style>
     :root {
       --primary: #2d3748;
@@ -15,403 +14,178 @@
       --shadow: 0 2px 8px rgba(44,62,80,0.08);
     }
     html, body {
-      margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); scroll-behavior: smooth;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      scroll-behavior: smooth;
     }
     /* Animations */
     @keyframes fadeInUp {
-      0% { opacity: 0; transform: translateY(40px); }
+      0% { opacity: 0; transform: translateY(20px); }
       100% { opacity: 1; transform: translateY(0); }
     }
-    @keyframes fadeIn {
-      0% { opacity: 0; }
-      100% { opacity: 1; }
+    @keyframes scaleIn {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
     }
-    .fade-in-up { animation: fadeInUp 1s cubic-bezier(.23,1.01,.32,1) both; }
-    .fade-in { animation: fadeIn 1.2s ease both; }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    .fade-in-up { animation: fadeInUp 0.6s cubic-bezier(.23,1.01,.32,1) both; }
+    .scale-in { animation: scaleIn 0.3s ease-out both; }
+    .pulse:hover { animation: pulse 0.4s ease infinite; }
     .delay-1 { animation-delay: 0.2s; }
     .delay-2 { animation-delay: 0.4s; }
     .delay-3 { animation-delay: 0.6s; }
-    .delay-4 { animation-delay: 0.8s; }
-    header {
-      background: var(--card); box-shadow: var(--shadow); position: sticky; top: 0; z-index: 10;
-    }
-    .navbar {
-      display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; padding: 1rem 2rem;
-    }
-    .navbar-logo { font-weight: bold; font-size: 1.3rem; color: var(--primary); letter-spacing: 1px; }
-    .navbar-links a {
-      margin-left: 2rem; text-decoration: none; color: var(--primary); font-weight: 500; transition: color 0.2s;
-    }
-    .navbar-links a:hover { color: var(--accent); }
-    .hero {
-      display: flex; flex-wrap: wrap; align-items: center; justify-content: center; min-height: 70vh; background: linear-gradient(120deg, #e0e7ff 0%, #f7fafc 100%);
-      padding: 3rem 0 2rem 0;
-    }
-    .hero-content { display: flex; flex-wrap: wrap; align-items: center; max-width: 1100px; width: 100%; }
-    .hero-text { flex: 1 1 350px; padding: 2rem; }
-    .hero-title { font-size: 2.8rem; margin: 0 0 0.5rem 0; color: var(--primary); }
-    .hero-subtitle { font-size: 1.5rem; color: var(--accent); margin-bottom: 1rem; }
-    .hero-description { font-size: 1.1rem; margin-bottom: 2rem; }
-    .hero-buttons { display: flex; gap: 1rem; }
-    .btn {
-      padding: 0.7rem 1.5rem; border: none; border-radius: 25px; font-size: 1rem; cursor: pointer; transition: background 0.2s, color 0.2s, transform 0.18s;
-      text-decoration: none;
-    }
-    .btn:hover {
-      transform: scale(1.07);
-    }
-    .btn-primary { background: var(--primary); color: #fff; }
-    .btn-primary:hover { background: var(--accent); color: var(--primary); }
-    .btn-secondary { background: #fff; color: var(--primary); border: 1.5px solid var(--primary); }
-    .btn-secondary:hover { background: var(--primary); color: #fff; }
-    .hero-image { flex: 1 1 250px; display: flex; justify-content: center; align-items: center; }
-    .profile-img {
-      width: 180px; height: 180px; border-radius: 50%; background: #cbd5e1; display: flex; align-items: center; justify-content: center; font-size: 4rem; color: #fff; box-shadow: var(--shadow);
-    }
-    section { padding: 3rem 0; }
-    .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
-    .section-title { font-size: 2rem; color: var(--primary); margin-bottom: 2rem; text-align: center; }
-    /* About */
-    .about-content { display: flex; flex-wrap: wrap; justify-content: center; }
-    .about-text { flex: 1 1 400px; font-size: 1.1rem; }
-    .about-stats { display: flex; gap: 2rem; margin-top: 1.5rem; }
-    .stat { background: var(--card); box-shadow: var(--shadow); border-radius: 10px; padding: 1rem 2rem; text-align: center; }
-    .stat-number { font-size: 1.5rem; font-weight: bold; color: var(--accent); }
-    .stat-label { display: block; font-size: 0.95rem; color: #555; }
-    /* Skills */
-    .skills-grid { display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; }
-    .skill-category { background: var(--card); box-shadow: var(--shadow); border-radius: 10px; padding: 1.5rem 2rem; min-width: 220px; }
-    .skill-category h3 { margin-top: 0; color: var(--primary); }
-    .skill-items { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
-    .skill-item { background: var(--accent); color: #fff; border-radius: 15px; padding: 0.4rem 1rem; font-size: 0.98rem; }
-    /* Projects */
-    .projects-grid { display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; }
-    .project-card {
-      background: var(--card); box-shadow: var(--shadow); border-radius: 12px; overflow: hidden; width: 320px; display: flex; flex-direction: column; transition: transform 0.15s, box-shadow 0.15s;
-    }
-    .project-card:hover { transform: translateY(-12px) scale(1.04); box-shadow: 0 10px 32px rgba(44,62,80,0.18); }
-    .project-image { height: 120px; display: flex; align-items: center; justify-content: center; background: #e0e7ff; font-size: 2.5rem; }
-    .project-content { padding: 1.2rem 1.5rem; flex: 1; display: flex; flex-direction: column; }
-    .project-tech { margin: 0.7rem 0; }
-    .tech-tag { background: var(--accent); color: #fff; border-radius: 12px; padding: 0.2rem 0.8rem; font-size: 0.9rem; margin-right: 0.5rem; }
-    .project-links { margin-top: auto; }
-    .project-link { color: var(--primary); text-decoration: none; margin-right: 1rem; font-weight: 500; }
-    .project-link:hover { color: var(--accent); }
-    /* Contact */
-    .contact-content { display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; align-items: flex-start; }
-    .contact-info { flex: 1 1 300px; }
-    .contact-methods { margin: 1.2rem 0; }
-    .contact-method { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.7rem; font-size: 1.05rem; }
-    .contact-icon { font-size: 1.3rem; }
-    .social-links { display: flex; gap: 1.2rem; margin-top: 1.2rem; }
-    .social-link {
-      color: var(--primary); text-decoration: none; font-size: 1.2rem; transition: color 0.2s, transform 0.2s;
-    }
-    .social-link:hover {
-      color: var(--accent); transform: translateY(-3px) scale(1.1);
-    }
-    /* Footer */
-    footer { background: var(--primary); color: #fff; text-align: center; padding: 1.2rem 0; margin-top: 2rem; font-size: 1rem; }
-    @media (max-width: 900px) {
-      .hero-content, .about-content, .skills-grid, .projects-grid, .contact-content { flex-direction: column; align-items: center; }
-      .hero-text, .hero-image, .about-text, .contact-info { padding: 1rem 0; }
-    }
-  </style>
-</head>
-<body>
-  <!-- Navigation Bar -->
-  <header>
-    <nav class="navbar fade-in-up delay-1">
-      <div class="navbar-logo">Soham</div>
-      <div class="navbar-links">
-        <a href="#about">About</a>
-        <a href="#skills">Skills</a>
-        <a href="#projects">Projects</a>
-        <a href="#contact">Contact</a>
-      </div>
-    </nav>
-  </header>
 
-  <main>
-    <!-- Hero Section -->
-    <section class="hero">
-      <div class="hero-content">
-        <div class="hero-text fade-in-up delay-2">
-          <h1 class="hero-title">Hi, I'm Soham</h1>
-          <p class="hero-subtitle">Full-Stack Developer</p>
-          <p class="hero-description">
-            I build modern web applications with a focus on clean code, user experience, and scalable solutions.
-          </p>
-          <div class="hero-buttons">
-            <a href="#about" class="btn btn-primary">Learn More</a>
-            <a href="#contact" class="btn btn-secondary">Get In Touch</a>
-          </div>
-        </div>
-        <div class="hero-image fade-in-up delay-3">
-          <div class="profile-img" title="Profile Image">SC</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="about">
-      <div class="container">
-        <h2 class="section-title fade-in-up delay-1">About Me</h2>
-        <div class="about-content">
-          <div class="about-text fade-in-up delay-2">
-            <p>
-              I'm a passionate fullstack developer with expertise in building robust web applications. 
-              I love solving complex problems and creating elegant solutions that make a difference.
-            </p>
-            <p>
-              With experience in both frontend and backend development, I enjoy working across the 
-              full stack to deliver complete, user-focused solutions.
-            </p>
-            <div class="about-stats">
-              <div class="stat fade-in-up delay-3">
-                <span class="stat-number">1+</span>
-                <span class="stat-label">Years Experience</span>
-              </div>
-              <div class="stat fade-in-up delay-4">
-                <span class="stat-number">2+</span>
-                <span class="stat-label">Projects Completed</span>
-              </div>
-              <div class="stat fade-in-up delay-4">
-                <span class="stat-number">5+</span>
-                <span class="stat-label">Technologies</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section id="skills" class="skills">
-      <div class="container">
-        <h2 class="section-title fade-in-up delay-1">Skills & Technologies</h2>
-        <div class="skills-grid">
-          <div class="skill-category fade-in-up delay-2">
-            <h3>Frontend</h3>
-            <div class="skill-items">
-              <span class="skill-item">JavaScript</span>
-              <span class="skill-item">HTML5</span>
-              <span class="skill-item">CSS3</span>
-              <span class="skill-item">Sass</span>
-            </div>
-          </div>
-          <div class="skill-category fade-in-up delay-3">
-            <h3>Backend</h3>
-            <div class="skill-items">
-              <span class="skill-item">Ruby on Rails</span>
-              <span class="skill-item">Node.js</span>
-              <span class="skill-item">PostgreSQL</span>
-              <span class="skill-item">Redis</span>
-            </div>
-          </div>
-          <div class="skill-category fade-in-up delay-4">
-            <h3>Tools & Others</h3>
-            <div class="skill-items">
-              <span class="skill-item">Git</span>
-              <span class="skill-item">Docker</span>
-              <span class="skill-item">AWS</span>
-              <span class="skill-item">Linux</span>
-              <span class="skill-item">CI/CD</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="projects">
-      <div class="container">
-        <h2 class="section-title fade-in-up delay-1">Featured Projects</h2>
-        <div class="projects-grid">
-          <div class="project-card fade-in-up delay-2">
-            <div class="project-image">
-              <span>🚀</span>
-            </div>
-            <div class="project-content">
-              <h3>BGV Platform</h3>
-              <p>A full-stack solution built with Ruby on Rails.</p>
-              <div class="project-tech">
-                <span class="tech-tag">Rails</span>
-                <span class="tech-tag">PostgreSQL</span>
-              </div>
-              <div class="project-links">
-                <a href="#" class="project-link">View Project</a>
-                <a href="#" class="project-link">GitHub</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="project-card fade-in-up delay-3">
-            <div class="project-image">
-              <span>📱</span>
-            </div>
-            <div class="project-content">
-              <h3>Task Management App</h3>
-              <p>A collaborative task management application with real-time updates.</p>
-              <div class="project-tech">
-                <span class="tech-tag">Vue.js</span>
-                <span class="tech-tag">Node.js</span>
-                <span class="tech-tag">Socket.io</span>
-              </div>
-              <div class="project-links">
-                <a href="#" class="project-link">View Project</a>
-                <a href="#" class="project-link">GitHub</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="project-card fade-in-up delay-4">
-            <div class="project-image">
-              <span>🎯</span>
-            </div>
-            <div class="project-content">
-              <h3>Portfolio Website</h3>
-              <p>This responsive portfolio website built with modern web technologies.</p>
-              <div class="project-tech">
-                <span class="tech-tag">Rails</span>
-                <span class="tech-tag">CSS3</span>
-                <span class="tech-tag">HTML5</span>
-              </div>
-              <div class="project-links">
-                <a href="#" class="project-link">View Project</a>
-                <a href="#" class="project-link">GitHub</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-      <div class="container">
-        <h2 class="section-title fade-in-up delay-1">Get In Touch</h2>
-        <div class="contact-content">
-          <div class="contact-info fade-in-up delay-2">
-            <h3>Let's work together!</h3>
-            <p>I'm always interested in new opportunities and exciting projects. Feel free to reach out!</p>
-            <div class="contact-methods">
-              <div class="contact-method fade-in-up delay-3">
-                <span class="contact-icon">📧</span>
-                <span>sohamchavan.sc07@gmail.com</span>
-              </div>
-              <div class="contact-method fade-in-up delay-4">
-                <span class="contact-icon">📱</span>
-                <span>7058933361</span>
-              </div>
-              <div class="contact-method fade-in-up delay-4">
-                <span class="contact-icon">📍</span>
-                <span>Maharashtra, India</span>
-              </div>
-            </div>
-          </div>
-          <div class="social-links fade-in-up delay-3">
-            <a href="https://github.com/sohamchavan07" class="social-link" target="_blank" rel="noopener" title="GitHub">GitHub</a>
-            <a href="https://www.linkedin.com/in/sohamchavan07/" class="social-link" target="_blank" rel="noopener" title="LinkedIn">LinkedIn</a>
-            <a href="#" class="social-link" title="Twitter">Twitter</a>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- Footer -->
-  <footer>
-    &copy; 2025 Soham Chavan. All rights reserved.
-  </footer>
-</body>
-</html> 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Tic Tac Toe</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem;
       text-align: center;
-      margin-top: 50px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
-
     h1 {
-      margin-bottom: 20px;
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      animation: fadeInUp 0.8s ease both;
     }
-
     .board {
       display: grid;
-      grid-template-columns: repeat(3, 100px);
-      grid-template-rows: repeat(3, 100px);
-      gap: 5px;
+      grid-template-columns: repeat(3, minmax(80px, 100px));
+      grid-template-rows: repeat(3, minmax(80px, 100px));
+      gap: 8px;
       justify-content: center;
       margin: auto;
+      max-width: 330px;
     }
-
     .cell {
-      background-color: #f0f0f0;
-      font-size: 36px;
+      background: var(--card);
+      font-size: 2rem;
+      font-weight: bold;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      border: 2px solid #333;
+      border: 2px solid var(--primary);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s, background 0.3s, box-shadow 0.3s;
     }
-
-    .cell:hover {
-      background-color: #ddd;
+    .cell:hover:not(.disabled) {
+      background: var(--accent);
+      color: #fff;
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(44,62,80,0.15);
     }
-
+    .cell.disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
     .status {
-      margin-top: 20px;
-      font-size: 20px;
+      margin: 1.5rem 0;
+      font-size: 1.2rem;
+      color: var(--primary);
+      font-weight: 500;
+      animation: fadeInUp 0.6s ease both;
     }
-
-    .restart {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 16px;
+    .mode, .restart {
+      padding: 0.7rem 1.5rem;
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
       cursor: pointer;
+      background: var(--primary);
+      color: #fff;
+      margin: 0.5rem;
+      transition: background 0.2s, transform 0.18s;
     }
-
-    .mode {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
+    .mode:hover, .restart:hover {
+      background: var(--accent);
+      transform: scale(1.07);
+    }
+    .mode.active {
+      background: var(--accent);
+      color: var(--primary);
+      font-weight: bold;
+    }
+    #difficulty-container {
+      margin: 1rem 0;
+      animation: fadeInUp 0.6s ease both;
+    }
+    #player-names {
+      margin: 1rem 0;
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    #player-names input {
+      padding: 0.5rem;
+      border: 1.5px solid var(--primary);
+      border-radius: 8px;
+      font-size: 1rem;
+      max-width: 140px;
+      box-sizing: border-box;
+    }
+    #scoreboard {
+      margin: 1rem 0;
+      font-size: 1.1rem;
+      color: var(--primary);
+      font-weight: 500;
+    }
+    @media (max-width: 600px) {
+      h1 { font-size: 2rem; }
+      .board { grid-template-columns: repeat(3, 80px); grid-template-rows: repeat(3, 80px); gap: 5px; }
+      .cell { font-size: 1.8rem; }
+      .status { font-size: 1rem; }
+      .mode, .restart { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
+      #player-names input { max-width: 100px; font-size: 0.9rem; }
+    }
+    @media (max-width: 400px) {
+      .board { grid-template-columns: repeat(3, 60px); grid-template-rows: repeat(3, 60px); }
+      .cell { font-size: 1.5rem; }
+      #player-names { flex-direction: column; align-items: center; }
+      #player-names input { max-width: 80%; }
     }
   </style>
 </head>
 <body>
-
-  <h1>Tic Tac Toe</h1>
-  <div>
-    <button class="mode" onclick="setMode('player')">Vs Player</button>
-    <button class="mode" onclick="setMode('computer')">Vs Computer</button>
+  <div class="container">
+    <h1 class="fade-in-up" role="heading" aria-level="1">Tic Tac Toe</h1>
+    <div class="fade-in-up delay-1" role="group" aria-label="Game mode selection">
+      <button class="mode" onclick="setMode('player')" aria-label="Play against another player">Vs Player</button>
+      <button class="mode" onclick="setMode('computer')" aria-label="Play against computer">Vs Computer</button>
+    </div>
+    <div id="difficulty-container" style="display:none;" class="fade-in-up delay-2" role="group" aria-label="Difficulty selection">
+      <span>Difficulty: </span>
+      <button class="mode" onclick="setDifficulty('easy')" aria-label="Set easy difficulty">Easy</button>
+      <button class="mode" onclick="setDifficulty('medium')" aria-label="Set medium difficulty">Medium</button>
+      <button class="mode" onclick="setDifficulty('hard')" aria-label="Set hard difficulty">Hard</button>
+    </div>
+    <div id="player-names" class="fade-in-up delay-3" role="form" aria-label="Player name input">
+      <input id="player1-name" type="text" placeholder="Player 1 Name" value="Player 1" aria-label="Enter Player 1 name">
+      <input id="player2-name" type="text" placeholder="Player 2/Computer Name" value="Player 2" aria-label="Enter Player 2 or Computer name">
+      <button class="mode" onclick="setNames()" aria-label="Set player names">Set Names</button>
+    </div>
+    <div id="scoreboard" class="fade-in-up delay-4" aria-live="polite">
+      <span id="score1">Player 1: 0</span> | <span id="score2">Player 2: 0</span>
+    </div>
+    <div class="board" id="board" role="grid" aria-label="Tic Tac Toe game board"></div>
+    <div class="status" id="status" aria-live="assertive"></div>
+    <button class="restart pulse" onclick="startGame()" aria-label="Restart game">Restart</button>
   </div>
-  <div id="difficulty-container" style="display:none; margin-top:10px;">
-    <span>Difficulty: </span>
-    <button class="mode" onclick="setDifficulty('easy')">Easy</button>
-    <button class="mode" onclick="setDifficulty('medium')">Medium</button>
-    <button class="mode" onclick="setDifficulty('hard')">Hard</button>
-  </div>
-  <div id="player-names" style="margin-top:10px;">
-    <input id="player1-name" type="text" placeholder="Player 1 Name" value="Player 1" style="width:120px;">
-    <input id="player2-name" type="text" placeholder="Player 2/Computer Name" value="Player 2" style="width:140px;">
-    <button onclick="setNames()">Set Names</button>
-  </div>
-  <div id="scoreboard" style="margin-top:10px; font-size:18px;">
-    <span id="score1">Player 1: 0</span> | <span id="score2">Player 2: 0</span>
-  </div>
-  <div class="board" id="board"></div>
-  <div class="status" id="status"></div>
-  <button class="restart" onclick="startGame()">Restart</button>
-  <audio id="move-sound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa4c3b.mp3"></audio>
-  <audio id="win-sound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa4c3b.mp3"></audio>
-  <audio id="draw-sound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa4c3b.mp3"></audio>
+  <audio id="move-sound" src="https://cdn.pixabay.com/audio/2023/02/22/audio_4c37c1f767.mp3"></audio>
+  <audio id="win-sound" src="https://cdn.pixabay.com/audio/2023/03/27/audio_4c5e33ce29.mp3"></audio>
+  <audio id="draw-sound" src="https://cdn.pixabay.com/audio/2023/03/29/audio_4e9d0d39a0.mp3"></audio>
 
   <script>
     const boardElement = document.getElementById('board');
@@ -442,11 +216,15 @@
       mode = selectedMode;
       difficultyContainer.style.display = mode === 'computer' ? 'block' : 'none';
       document.getElementById('player2-name').value = mode === 'computer' ? 'Computer' : 'Player 2';
+      document.querySelectorAll('.mode').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
       startGame();
     }
 
     function setDifficulty(level) {
       difficulty = level;
+      document.querySelectorAll('#difficulty-container .mode').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
       startGame();
     }
 
@@ -466,12 +244,18 @@
       boardElement.innerHTML = '';
       board.forEach((cell, index) => {
         const cellElement = document.createElement('div');
-        cellElement.className = 'cell';
+        cellElement.className = 'cell scale-in';
+        cellElement.style.animationDelay = `${index * 0.05}s`;
         cellElement.textContent = cell;
+        cellElement.setAttribute('role', 'gridcell');
+        cellElement.setAttribute('aria-label', `Cell ${index + 1}: ${cell || 'empty'}`);
         if (winCombo.includes(index)) {
-          cellElement.style.backgroundColor = '#90ee90';
-          cellElement.style.borderColor = '#228B22';
-          cellElement.style.transition = 'background 0.5s';
+          cellElement.style.backgroundColor = 'var(--accent)';
+          cellElement.style.borderColor = 'var(--primary)';
+          cellElement.style.color = '#fff';
+        }
+        if (cell || isGameOver || (mode === 'computer' && currentPlayer === 'O')) {
+          cellElement.classList.add('disabled');
         }
         cellElement.addEventListener('click', () => handleMove(index));
         boardElement.appendChild(cellElement);
@@ -480,7 +264,7 @@
 
     function handleMove(index) {
       if (isGameOver || board[index]) return;
-      if (mode === 'computer' && currentPlayer === 'O') return; // Prevent player from playing as O in vs computer
+      if (mode === 'computer' && currentPlayer === 'O') return;
       board[index] = currentPlayer;
       drawBoard();
       moveSound.currentTime = 0; moveSound.play();
@@ -498,7 +282,7 @@
         currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
         statusElement.textContent = `Player ${currentPlayer}'s turn` + (mode === 'computer' ? ` (vs Computer, ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)})` : '');
         if (mode === 'computer' && currentPlayer === 'O' && !isGameOver) {
-          setTimeout(computerMove, 500); // Small delay for realism
+          setTimeout(computerMove, 500);
         }
       }
     }
@@ -540,23 +324,20 @@
     }
 
     function getMediumMove() {
-      // 1. Block player win
       for (let i = 0; i < 9; i++) {
         if (board[i] === '') {
           board[i] = 'X';
           if (checkWin()) {
             board[i] = '';
-            return i; // Block this move
+            return i;
           }
           board[i] = '';
         }
       }
-      // 2. Otherwise random
       return getRandomMove();
     }
 
     function getBestMove() {
-      // Minimax algorithm for unbeatable AI
       let bestScore = -Infinity;
       let move;
       for (let i = 0; i < 9; i++) {
@@ -633,6 +414,5 @@
 
     startGame();
   </script>
-
 </body>
 </html>
